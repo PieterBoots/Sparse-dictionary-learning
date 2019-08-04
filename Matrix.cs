@@ -268,7 +268,7 @@ namespace WindowsFormsApplication1
         //        Matrix b1 = Coefs[i];
 
         //        double dot = Matrix.Dot(Reference, Coefs[i]);
-        //        double err = Matrix.Root(Reference, Coefs[i] * dot);
+        //        double err = Matrix.SqrErr(Reference, Coefs[i] * dot);
         //        if (err < min)
         //        {
         //            min = err;
