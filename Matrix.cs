@@ -14,8 +14,7 @@ namespace WindowsFormsApplication1
         //----------------------------------
 
         public Matrix(int _N)
-        {
-            // TODO: Complete member initialization
+        {        
             this.N = _N;
             Values = new double[N*N];
         }
@@ -23,8 +22,7 @@ namespace WindowsFormsApplication1
         //----------------------------------
 
         public Matrix(int _N, double InitValue)
-        {
-            // TODO: Complete member initialization
+        {            
             this.N = _N;
             Values = new double[N*N];
             for (int x = 0; x < N * N; x++)
@@ -49,27 +47,7 @@ namespace WindowsFormsApplication1
             }
             return M;
         }
-
-        public double MaxDelta()
-        {
-            Matrix M = new Matrix(N);
-            double total = 0;
-            for (int x = 0; x < N * N; x++)
-            {
-                total = total + Values[x];
-            }
-            double max=0;
-            for (int x = 0; x < N * N; x++)
-            {
-                double delta = Math.Abs(Values[x] - (total / (N * N)));
-                if (delta > max)
-                {
-                    max = delta;
-                }
-            }
-            return max;
-        }
-
+             
         //----------------------------------
      
         public static double Dot(Matrix a1,Matrix b1)
@@ -190,6 +168,8 @@ namespace WindowsFormsApplication1
             }
             return M;
         }
+        
+        //----------------------------------        
 
         public static Matrix operator -(Double a1, Matrix b1)
         {
@@ -258,25 +238,6 @@ namespace WindowsFormsApplication1
             }
             return pick;
         }
-
-        //static public int BestMatch(Matrix Reference, Matrix[] Coefs)
-        //{
-        //    double min = 999999999;
-        //    int pick = 0;
-        //    for (int i = 0; i < Coefs.Length; i++)
-        //    {
-        //        Matrix b1 = Coefs[i];
-
-        //        double dot = Matrix.Dot(Reference, Coefs[i]);
-        //        double err = Matrix.SqrErr(Reference, Coefs[i] * dot);
-        //        if (err < min)
-        //        {
-        //            min = err;
-        //            pick = i;
-        //        }
-        //    }
-        //    return pick;
-        //}
 
         //----------------------------------
 
