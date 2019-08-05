@@ -1,289 +1,283 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WindowsFormsApplication1
+class Matrix
 {
-    class Matrix
+    public double[] Values = null;
+    int N = 0;
+  
+    //----------------------------------
+
+    public Matrix(int _N)
     {
-        public double[] Values = null;
-        int N = 0;
-        public int count=0;
-        //----------------------------------
+        this.N = _N;
+        Values = new double[N * N];
+    }
 
-        public Matrix(int _N)
-        {        
-            this.N = _N;
-            Values = new double[N*N];
-        }
+    //----------------------------------
 
-        //----------------------------------
-
-        public Matrix(int _N, double InitValue)
-        {            
-            this.N = _N;
-            Values = new double[N*N];
-            for (int x = 0; x < N * N; x++)
-            {
-                Values[x] = InitValue;
-            }
-        }
-        
-        //----------------------------------
-
-        public Matrix Average()
+    public Matrix(int _N, double InitValue)
+    {
+        this.N = _N;
+        Values = new double[N * N];
+        for (int x = 0; x < N * N; x++)
         {
-            Matrix M = new Matrix(N);
-            double total = 0;
-            for (int x = 0; x < N * N; x++)
-            {
-                total = total + Values[x];
-            }
-            for (int x = 0; x < N * N; x++)
-            {
-                M.Values[x] = total / (N * N);
-            }
-            return M;
+            Values[x] = InitValue;
         }
-             
-        //----------------------------------
-     
-        public static double Dot(Matrix a1,Matrix b1)
-        {           
-            double Value = 0;
-            for (int x = 0; x < a1.N*a1.N; x++)
-            {
-                Value = Value + a1.Values[x] * b1.Values[x];
-            }       
-            return Value;            
-        }
+    }
 
-        //----------------------------------
-       
-        public Matrix Add(Double A)
+    //----------------------------------
+
+    public Matrix Average()
+    {
+        Matrix M = new Matrix(N);
+        double total = 0;
+        for (int x = 0; x < N * N; x++)
         {
-            Matrix M = new Matrix(N);
-            for (int x = 0; x < N * N; x++)
-            {
-                M.Values[x] = Values[x] + A;
-            }
-            return M;
+            total = total + Values[x];
         }
-
-        //----------------------------------
-
-        public static Matrix operator +(Double a1, Matrix b1)
+        for (int x = 0; x < N * N; x++)
         {
-            Matrix M = new Matrix(b1.N);
-            for (int x = 0; x < b1.N * b1.N; x++)
-            {
-                M.Values[x] = b1.Values[x] + a1;
-            }
-            return M;
+            M.Values[x] = total / (N * N);
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public static Matrix operator +(Matrix a1, double b1)
+    public static double Dot(Matrix a1, Matrix b1)
+    {
+        double Value = 0;
+        for (int x = 0; x < a1.N * a1.N; x++)
         {
-            Matrix M = new Matrix(a1.N);
-            for (int x = 0; x < a1.N*a1.N; x++)
-            {                
-                    M.Values[x] = a1.Values[x] + b1;                
-            }
-            return M;
+            Value = Value + a1.Values[x] * b1.Values[x];
         }
+        return Value;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public static Matrix operator +(Matrix a1, Matrix b1)
+    public Matrix Add(Double A)
+    {
+        Matrix M = new Matrix(N);
+        for (int x = 0; x < N * N; x++)
         {
-            Matrix M = new Matrix(a1.N);
-            for (int x = 0; x < a1.N * a1.N; x++)
-            {
-                M.Values[x] = a1.Values[x] + b1.Values[x];
-            }
-            return M;
+            M.Values[x] = Values[x] + A;
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public static Matrix operator *(Matrix a1, Matrix b1)
+    public static Matrix operator +(Double a1, Matrix b1)
+    {
+        Matrix M = new Matrix(b1.N);
+        for (int x = 0; x < b1.N * b1.N; x++)
         {
-            Matrix M = new Matrix(a1.N);
-            for (int x = 0; x < a1.N * a1.N; x++)
-            {
-                M.Values[x] = a1.Values[x] * b1.Values[x];
-            }
-            return M;
+            M.Values[x] = b1.Values[x] + a1;
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public static Matrix operator /(Matrix a1, double b1)
+    public static Matrix operator +(Matrix a1, double b1)
+    {
+        Matrix M = new Matrix(a1.N);
+        for (int x = 0; x < a1.N * a1.N; x++)
         {
-            Matrix M = new Matrix(a1.N);
-            for (int x = 0; x < a1.N * a1.N; x++)
-            {
-                M.Values[x] = a1.Values[x] / b1;
-            }
-            return M;
+            M.Values[x] = a1.Values[x] + b1;
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public static Matrix operator *(Matrix a1, double b1)
+    public static Matrix operator +(Matrix a1, Matrix b1)
+    {
+        Matrix M = new Matrix(a1.N);
+        for (int x = 0; x < a1.N * a1.N; x++)
         {
-            Matrix M = new Matrix(a1.N);
-            for (int x = 0; x < a1.N * a1.N; x++)
-            {
-                M.Values[x] = a1.Values[x] * b1;
-            }
-            return M;
+            M.Values[x] = a1.Values[x] + b1.Values[x];
         }
+        return M;
+    }
 
+    //----------------------------------
 
-        //----------------------------------
-
-        public static Matrix operator *(double a1, Matrix b1)
+    public static Matrix operator *(Matrix a1, Matrix b1)
+    {
+        Matrix M = new Matrix(a1.N);
+        for (int x = 0; x < a1.N * a1.N; x++)
         {
-            Matrix M = new Matrix(b1.N);
-            for (int x = 0; x < b1.N * b1.N; x++)
-            {
-                M.Values[x] = a1 * b1.Values[x];
-            }
-            return M;
+            M.Values[x] = a1.Values[x] * b1.Values[x];
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public static Matrix operator -(Matrix a1, Matrix b1)
+    public static Matrix operator /(Matrix a1, double b1)
+    {
+        Matrix M = new Matrix(a1.N);
+        for (int x = 0; x < a1.N * a1.N; x++)
         {
-            Matrix M = new Matrix(a1.N);
-            for (int x = 0; x < a1.N * a1.N; x++)
-            {
-                M.Values[x] = a1.Values[x] - b1.Values[x];
-            }
-            return M;
+            M.Values[x] = a1.Values[x] / b1;
         }
-        
-        //----------------------------------        
+        return M;
+    }
 
-        public static Matrix operator -(Double a1, Matrix b1)
+    //----------------------------------
+
+    public static Matrix operator *(Matrix a1, double b1)
+    {
+        Matrix M = new Matrix(a1.N);
+        for (int x = 0; x < a1.N * a1.N; x++)
         {
-            Matrix M = new Matrix(b1.N);
-            for (int x = 0; x < b1.N * b1.N; x++)
-            {
-                M.Values[x] = b1.Values[x] - a1;
-            }
-            return M;
+            M.Values[x] = a1.Values[x] * b1;
         }
+        return M;
+    }
 
-        //----------------------------------
 
-        public static Matrix operator -(Matrix a1, double b1)
+    //----------------------------------
+
+    public static Matrix operator *(double a1, Matrix b1)
+    {
+        Matrix M = new Matrix(b1.N);
+        for (int x = 0; x < b1.N * b1.N; x++)
         {
-            Matrix M = new Matrix(a1.N);
-            for (int x = 0; x < a1.N * a1.N; x++)
-            {
-                M.Values[x] = a1.Values[x] - b1;
-            }
-            return M;
+            M.Values[x] = a1 * b1.Values[x];
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public Matrix Sub(Matrix A)
+    public static Matrix operator -(Matrix a1, Matrix b1)
+    {
+        Matrix M = new Matrix(a1.N);
+        for (int x = 0; x < a1.N * a1.N; x++)
         {
-            Matrix M = new Matrix(N);
-            for (int x = 0; x < N * N; x++)
-            {
-                M.Values[x] = Values[x] - A.Values[x];
-            }
-            return M;
+            M.Values[x] = a1.Values[x] - b1.Values[x];
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------        
 
-        static public int BestMatch(Matrix Reference,Matrix[] Coefs)
+    public static Matrix operator -(Double a1, Matrix b1)
+    {
+        Matrix M = new Matrix(b1.N);
+        for (int x = 0; x < b1.N * b1.N; x++)
         {
-            double min = 999999999;
-            int pick = 0;
-            double[] r=Reference.Values;
-            double dot = 0;
-            double err = 0;
-            double[] cf = Coefs[0].Values; ;
-            double tmp = 0;
-
-            for (int i = 0; i < Coefs.Length; i++)
-            {
-                cf = Coefs[i].Values;
-                for (int x = 0; x < Reference.N * Reference.N; x++)
-                {
-                    dot = dot + r[x] * cf[x];
-                }
-                err = 0;
-                for (int x = 0; x < Reference.N * Reference.N; x++)
-                {
-                    tmp = (r[x] - cf[x] * dot);
-                    err = err + tmp * tmp;                                    
-                }
-                if (err < min)
-                {
-                    min = err;
-                    pick = i;
-                }
-            }
-            return pick;
+            M.Values[x] = b1.Values[x] - a1;
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public static double SqrErr(Matrix a1,Matrix b1)
+    public static Matrix operator -(Matrix a1, double b1)
+    {
+        Matrix M = new Matrix(a1.N);
+        for (int x = 0; x < a1.N * a1.N; x++)
         {
-            double Err = 0;
-            for (int x = 0; x < a1.N * a1.N; x++)
-            {
-                Err = Err + (a1.Values[x] - b1.Values[x]) * (a1.Values[x] - b1.Values[x]);                                         
-            }
-            return Err;
+            M.Values[x] = a1.Values[x] - b1;
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public Matrix Mul(Double A)
+    public Matrix Sub(Matrix A)
+    {
+        Matrix M = new Matrix(N);
+        for (int x = 0; x < N * N; x++)
         {
-            Matrix M = new Matrix(N);
-            for (int x = 0; x < N*N; x++)
-            {
-                M.Values[x] = Values[x] * A;
-            }
-            return M;
+            M.Values[x] = Values[x] - A.Values[x];
         }
+        return M;
+    }
 
-        //----------------------------------
+    //----------------------------------
 
-        public void Normalize()
+    static public int BestMatch(Matrix Reference, Matrix[] Coefs)
+    {
+        double min = 999999999;
+        int pick = 0;
+        double[] r = Reference.Values;
+        double dot = 0;
+        double err = 0;
+        double[] cf = Coefs[0].Values; ;
+        double tmp = 0;
+
+        for (int i = 0; i < Coefs.Length; i++)
         {
-            double avg = 0;
-            double total = 0;
-            for (int x = 0; x < N * N; x++)
+            cf = Coefs[i].Values;
+            for (int x = 0; x < Reference.N * Reference.N; x++)
             {
-                total = total + Values[x];
+                dot = dot + r[x] * cf[x];
             }
-            avg = total / (N * N);
-            double rangetotal = 0;
-            for (int x = 0; x < N*N; x++)
+            err = 0;
+            for (int x = 0; x < Reference.N * Reference.N; x++)
             {
-                rangetotal = rangetotal + (Values[x] - avg) * (Values[x] - avg);
+                tmp = (r[x] - cf[x] * dot);
+                err = err + tmp * tmp;
             }
-            double maxrange = Math.Sqrt(rangetotal);
-            for (int x = 0; x < N * N; x++)
+            if (err < min)
             {
-                Values[x] = (Values[x] - avg) / maxrange;
+                min = err;
+                pick = i;
             }
+        }
+        return pick;
+    }
+
+    //----------------------------------
+
+    public static double SqrErr(Matrix a1, Matrix b1)
+    {
+        double Err = 0;
+        for (int x = 0; x < a1.N * a1.N; x++)
+        {
+            Err = Err + (a1.Values[x] - b1.Values[x]) * (a1.Values[x] - b1.Values[x]);
+        }
+        return Err;
+    }
+
+    //----------------------------------
+
+    public Matrix Mul(Double A)
+    {
+        Matrix M = new Matrix(N);
+        for (int x = 0; x < N * N; x++)
+        {
+            M.Values[x] = Values[x] * A;
+        }
+        return M;
+    }
+
+    //----------------------------------
+
+    public void Normalize()
+    {
+        double avg = 0;
+        double total = 0;
+        for (int x = 0; x < N * N; x++)
+        {
+            total = total + Values[x];
+        }
+        avg = total / (N * N);
+        double rangetotal = 0;
+        for (int x = 0; x < N * N; x++)
+        {
+            rangetotal = rangetotal + (Values[x] - avg) * (Values[x] - avg);
+        }
+        double maxrange = Math.Sqrt(rangetotal);
+        for (int x = 0; x < N * N; x++)
+        {
+            Values[x] = (Values[x] - avg) / maxrange;
         }
     }
 }
+
