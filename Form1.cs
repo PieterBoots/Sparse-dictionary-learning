@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 
 namespace WindowsFormsApplication1
@@ -19,7 +20,7 @@ namespace WindowsFormsApplication1
             InitializeComponent();
         }
 
-        int N = 8;
+        int N =8;
         int CoefsN =64;
         int KSVD_Depth =64;
    
@@ -68,10 +69,11 @@ namespace WindowsFormsApplication1
                             Matrix Norm = PatchIn - PatchOut;
                             int pick = Matrix.BestMatch(Norm, coefs);
                             double pickvalue = Matrix.Dot(Norm, coefs[pick]);
-                             PatchOut = (coefs[pick] * pickvalue) + PatchOut;
-                          
+
+                            PatchOut = PatchOut + (pickvalue * coefs[pick]);
+
                             //FeedBack
-                             Norm.Normalize();
+                            Norm.Normalize();
                             CoefsCopy[pick] = CoefsCopy[pick] + Norm * pickvalue;
                         }
                     }
