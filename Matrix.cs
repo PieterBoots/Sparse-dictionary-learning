@@ -4,7 +4,7 @@ class Matrix
 {
     public double[] Values = null;
     int N = 0;
-  
+
     //----------------------------------
 
     public Matrix(int _N)
@@ -24,16 +24,16 @@ class Matrix
             Values[x] = InitValue;
         }
     }
-    
+
     //----------------------------------
 
-    public static Matrix GetMatrixRandom(int _N,Random rnd)
+    public static Matrix GetMatrixRandom(int _N, Random rnd)
     {
-        Matrix M=new Matrix(_N);
-     
-           for (int x = 0; x < M.N * M.N; x++)
+        Matrix M = new Matrix(_N);
+
+        for (int x = 0; x < M.N * M.N; x++)
         {
-            M.Values[x] = rnd.Next(256)-128;
+            M.Values[x] = rnd.Next(256) - 128;
         }
         M.Normalize();
         return M;
@@ -41,27 +41,27 @@ class Matrix
 
     //----------------------------------
 
-    public static Matrix[] GetMatrixArrayRandom(int _N, Int32 cnt,Random rnd)
+    public static Matrix[] GetMatrixArrayRandom(int _N, Int32 cnt, Random rnd)
     {
-        Matrix[] coefs = new Matrix[cnt];      
+        Matrix[] coefs = new Matrix[cnt];
         for (int i = 0; i < cnt; i++)
         {
-            coefs[i] = Matrix.GetMatrixRandom(_N,rnd);
+            coefs[i] = Matrix.GetMatrixRandom(_N, rnd);
         }
         return coefs;
     }
 
     //----------------------------------
 
-    public void  MatrixRandom()
-    {        
+    public void MatrixRandom()
+    {
         Random rnd = new Random();
-        for (int x = 0; x < N* N; x++)
+        for (int x = 0; x < N * N; x++)
         {
             Values[x] = rnd.Next(256) - 128;
         }
         Normalize();
-       
+
     }
 
     //----------------------------------
@@ -77,12 +77,12 @@ class Matrix
     }
     //----------------------------------
 
-    public  Boolean AllZero()
+    public Boolean AllZero()
     {
-       
+
         for (int i = 0; i < N; i++)
         {
-            if (Values[i] != 0 )
+            if (Values[i] != 0)
             {
                 return false;
             }
@@ -93,35 +93,35 @@ class Matrix
     //----------------------------------
 
     public void Fill(Double Value)
-    {                 
+    {
         for (int x = 0; x < N * N; x++)
         {
             Values[x] = Value;
-        }       
+        }
     }
 
     //----------------------------------
 
     public void FillRnd(Random rnd)
-    {     
+    {
         for (int x = 0; x < N * N; x++)
         {
             Values[x] = rnd.Next(256) - 128;
         }
-        Normalize();      
+        Normalize();
     }
 
     //----------------------------------
 
-    public void FillRnd(Random rnd,int[,] Example)
+    public void FillRnd(Random rnd, int[,] Example)
     {
-        int x = rnd.Next(Example.GetLength(0)-N);
+        int x = rnd.Next(Example.GetLength(0) - N);
         int y = rnd.Next(Example.GetLength(1) - N);
-        for (int y1 = 0; y1 < N ; y1++)
+        for (int y1 = 0; y1 < N; y1++)
         {
-            for (int x1 = 0; x1 < N ; x1++)
+            for (int x1 = 0; x1 < N; x1++)
             {
-                Values[x1+y1*N] = Example[x1+x,y1+y];
+                Values[x1 + y1 * N] = Example[x1 + x, y1 + y];
             }
         }
         Normalize();
@@ -162,7 +162,7 @@ class Matrix
         for (int x = 0; x < a1.N * a1.N; x++)
         {
             Value = Value + a1.Values[x] * b1.Values[x];
-        } 
+        }
         return Value;
     }
 
@@ -381,15 +381,25 @@ class Matrix
         }
         avg = total / (N * N);
         double rangetotal = 0;
-   
+
         for (int x = 0; x < N * N; x++)
         {
             rangetotal = rangetotal + (Values[x] - avg) * (Values[x] - avg);
         }
         double maxrange = Math.Sqrt(rangetotal);
-        for (int x = 0; x < N * N; x++)
+        if (maxrange == 0)
         {
-            Values[x] = (Values[x] - avg) / maxrange;
+            for (int x = 0; x < N * N; x++)
+            {
+                Values[x] = 0;
+            }
+        }
+        else
+        {
+            for (int x = 0; x < N * N; x++)
+            {
+                Values[x] = (Values[x] - avg) / maxrange;
+            }
         }
     }
 
@@ -406,14 +416,25 @@ class Matrix
         }
         avg = total / (N * N);
         double rangetotal = 0;
+
         for (int x = 0; x < N * N; x++)
         {
             rangetotal = rangetotal + (Values[x] - avg) * (Values[x] - avg);
         }
         double maxrange = Math.Sqrt(rangetotal);
-        for (int x = 0; x < N * N; x++)
+        if (maxrange == 0)
         {
-           M.Values[x] = (Values[x] - avg) / maxrange;
+            for (int x = 0; x < N * N; x++)
+            {
+                M.Values[x] = 0;
+            }
+        }
+        else
+        {
+            for (int x = 0; x < N * N; x++)
+            {
+                M.Values[x] = (M.Values[x] - avg) / maxrange;
+            }
         }
         return M;
     }
