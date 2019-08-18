@@ -20,44 +20,43 @@ namespace WindowsFormsApplication1
             InitializeComponent();
         }
 
-        int N =8;
-        int CoefsN =64;
-        int KSVD_Depth =64;
+        int N =4;
+        int CoefsN =512;
+        int KSVD_Depth =2;
    
         //----------------------------------
 
         private void ButtonStart_Click(object sender, EventArgs e)
         {
-            int rib = (int)Math.Sqrt(CoefsN);           
+            int rib = (int)Math.Sqrt(CoefsN);
             if (rib * rib < CoefsN)
             {
                 rib = (int)Math.Sqrt(CoefsN) + 1;
             }
 
-            Bitmap bmp = (Bitmap)Bitmap.FromFile("Kawasaki_Valencia_2007_09_320x240.bmp");               
-            Bitmap Coefsbmp = new Bitmap((N+1) * rib, (N+1) * rib, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            
-            PicImage.Image = Helper.scaler(bmp, 2, InterpolationMode.NearestNeighbor);
-         
-           
-            PicCoefs.Image = Helper.scaler(Coefsbmp, 256,256, InterpolationMode.NearestNeighbor);                                            
-    
-            int[,] dat = new int[320, 240];
+            Bitmap InputBitmap = (Bitmap)Bitmap.FromFile("Kawasaki_Valencia_2007_09_320x240.bmp");
+            Bitmap SparseDicBitmap = new Bitmap((N + 1) * rib, (N + 1) * rib, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            PicImage.Image = Helper.scaler(InputBitmap, 2, InterpolationMode.NearestNeighbor);
+            PicCoefs.Image = Helper.scaler(SparseDicBitmap, 256, 256, InterpolationMode.NearestNeighbor);
+
+            int[,] memory = new int[320, 240];
             for (points A = new points(320, 240); A.DoIt; A.Inc())
             {
-                dat[A.x, A.y] = (int)(bmp.GetPixel(A.x, A.y).GetBrightness() * 255.0);
+                memory[A.x, A.y] = (int)(InputBitmap.GetPixel(A.x, A.y).GetBrightness() * 255.0);
             }
-            Random rnd = new Random();
-            Matrix[] coefs = Matrix.GetMatrixArrayRandom(N, CoefsN,rnd);
-            Matrix[] CoefsCopy = Matrix.GetMatrixArrayRandom(N, CoefsN,rnd);
 
-            Matrix PatchOut = null;                          
-       
-            for (int repeat = 0; repeat < 200; repeat++)
-            {
+            Random rnd = new Random();
+            Matrix[] CopyDictionairy = Matrix.GetMatrixArrayRandom(N, CoefsN, rnd);
+            Matrix[] Dictionairy = Matrix.GetMatrixArrayRandom(N, CoefsN, rnd);           
+
+            Matrix PatchOut = null;
+
+            for (int repeat = 0; repeat < 2000; repeat++)
+            {            
                 for (points A = new points(320 / N, 240 / N); A.DoIt; A.Inc())
                 {
-                    Matrix PatchIn = GetPatch(A,dat);
+                    Matrix PatchIn = GetPatch(A, memory);
                     for (int p = 0; p < KSVD_Depth; p++)
                     {
                         if (p == 0)
@@ -67,31 +66,29 @@ namespace WindowsFormsApplication1
                         else
                         {
                             Matrix Norm = PatchIn - PatchOut;
-                            int pick = Matrix.BestMatch(Norm, coefs);
-                            double pickvalue = Matrix.Dot(Norm, coefs[pick]);
-
-                            PatchOut = PatchOut + (pickvalue * coefs[pick]);
-
-                            //FeedBack
                             Norm.Normalize();
-                            CoefsCopy[pick] = CoefsCopy[pick] + Norm * pickvalue;
+                            int pick = Matrix.Nearest(Norm, CopyDictionairy);
+                            Matrix Atom = CopyDictionairy[pick];
+                            double pickvalue = Matrix.Dot(PatchIn - PatchOut, Atom);
+                            PatchOut = PatchOut + (pickvalue * Atom);                         
+                            //FeedBack                                                                                                                                     
+                            Dictionairy[pick] = Dictionairy[pick] + pickvalue * Norm;                            
                         }
                     }
-                    DrawPatch(A, bmp, PatchOut);
+                    DrawPatch(A, InputBitmap, PatchOut);
                 }
 
-                PicImage.Image = Helper.scaler(bmp, 2, InterpolationMode.NearestNeighbor);
+                PicImage.Image = Helper.scaler(InputBitmap, 2, InterpolationMode.NearestNeighbor);
                 PicImage.Refresh();
 
-                for (int i = 0; i < coefs.Length; i++)
-                {               
-                    CoefsCopy[i].Normalize();
-                    coefs[i].CopyFrom(CoefsCopy[i]);                  
-                    CoefsCopy[i].FillRnd(rnd);
+                for (int i = 0; i < CopyDictionairy.Length; i++)
+                {
+                    Dictionairy[i].Normalize();
+                    CopyDictionairy[i].CopyFrom(Dictionairy[i]);
+                    Dictionairy[i].FillRnd(rnd, memory);
                 }
-
-                DrawCoefs(Coefsbmp, coefs,rib);                            
-            }     
+                DrawCoefs(SparseDicBitmap, CopyDictionairy, rib);
+            }
         }
 
         //----------------------------------
