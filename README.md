@@ -3,7 +3,7 @@ Learn an Sparse dictionary of 8 x 8 patches using an algorithm similar to K-SVD
 
 ![Screenshot](https://github.com/PieterBoots/Sparse-dictionary-learning/edit/master/screenshot.jpg)
 
-You can change these values to ajust the process.
+You can change the following variables in the file 'Form1.cs' to ajust the process.
 
 Example 1
 
