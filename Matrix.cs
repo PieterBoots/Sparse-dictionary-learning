@@ -53,6 +53,30 @@ class Matrix
 
     //----------------------------------
 
+    public static Matrix[] FillRnd(int _N, Int32 cnt,Random rnd, int[,] Example)
+    {
+        Matrix[] coefs = new Matrix[cnt];
+        for (int i = 0; i < cnt; i++)
+        {
+            coefs[i] = new Matrix(_N);
+            int x = rnd.Next(Example.GetLength(0) - _N);
+            int y = rnd.Next(Example.GetLength(1) - _N);
+            for (int y1 = 0; y1 < _N; y1++)
+            {
+                for (int x1 = 0; x1 < _N; x1++)
+                {
+                    
+                    coefs[i].Values[x1 + y1 * _N] = Example[x1 + x, y1 + y];
+                }
+            }
+            coefs[i].Normalize();
+        }
+        return coefs;
+        
+    }
+
+    //----------------------------------
+
     public void MatrixRandom()
     {
         Random rnd = new Random();
@@ -63,6 +87,20 @@ class Matrix
         Normalize();
 
     }
+
+
+    //----------------------------------
+
+    public Matrix Negative()
+    {
+        Matrix M =new Matrix(N);
+        for (int x = 0; x < N * N; x++)
+        {
+            M.Values[x] = -Values[x];
+        }
+        return M;
+    }
+
 
     //----------------------------------
 
@@ -313,6 +351,18 @@ class Matrix
 
     //----------------------------------
 
+    static public double EuclideanDistance(Matrix a1,Matrix b1)
+    {
+        double total=0;
+          for (int x = 0; x < a1.N*a1.N; x++)
+        {
+            total = total + (a1.Values[x] - b1.Values[x]) * (a1.Values[x] - b1.Values[x]);
+        }
+        return Math.Sqrt(total);
+    }
+
+    //----------------------------------  
+
     static public int BestMatch(Matrix Reference, Matrix[] Coefs)
     {
         double min = 999999999;
@@ -334,6 +384,41 @@ class Matrix
             for (int x = 0; x < Reference.N * Reference.N; x++)
             {
                 tmp = (r[x] - cf[x] * dot);
+                err = err + tmp * tmp;
+            }
+            if (err < min)
+            {
+                min = err;
+                pick = i;
+            }
+        }
+        return pick;
+    }
+
+    //----------------------------------
+
+    static public int Nearest(Matrix Reference, Matrix[] Coefs)
+    {
+        double min = 999999999;
+        int pick = 0;          
+        double tmp = 0;
+        for (int i = 0; i < Coefs.Length; i++)
+        {                 
+            double err = 0;
+            for (int x = 0; x < Reference.N * Reference.N; x++)
+            {
+                tmp = (Reference.Values[x] - Coefs[i].Values[x]);
+                err = err + tmp * tmp;
+            }
+            if (err < min)
+            {
+                min = err;
+                pick = i;
+            }
+            err = 0;
+            for (int x = 0; x < Reference.N * Reference.N; x++)
+            {
+                tmp = (Reference.Values[x] + Coefs[i].Values[x]);
                 err = err + tmp * tmp;
             }
             if (err < min)
