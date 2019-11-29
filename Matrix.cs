@@ -3,7 +3,7 @@ using System;
 public class Matrix
 {
     public double[] Values = null;
-    int N = 0;
+    readonly int N = 0;
 
     //----------------------------------
 
@@ -151,7 +151,7 @@ public class Matrix
         Matrix M = new Matrix(N);
         double total = 0;
         for (int x = 0; x < N * N; x++)        
-            total = total + Values[x];        
+            total += Values[x];        
         for (int x = 0; x < N * N; x++)        
             M.Values[x] = total / (N * N);        
         return M;
@@ -163,7 +163,7 @@ public class Matrix
     {
         double Value = 0;
         for (int x = 0; x < a1.N * a1.N; x++)        
-            Value = Value + a1.Values[x] * b1.Values[x];        
+            Value += a1.Values[x] * b1.Values[x];        
         return Value;
     }
 
@@ -294,47 +294,41 @@ public class Matrix
     {
         double total = 0;
         for (int x = 0; x < a1.N * a1.N; x++)        
-            total = total + (a1.Values[x] - b1.Values[x]) * (a1.Values[x] - b1.Values[x]);        
+            total += (a1.Values[x] - b1.Values[x]) * (a1.Values[x] - b1.Values[x]);        
         return Math.Sqrt(total);
     }
 
     //----------------------------------
 
-    static public Matrix Nearest(Matrix Reference, Matrix[] Coefs, ref Int32 Index,Int32 Depth)
+    static public Matrix Nearest(Matrix Reference, Matrix[] Coefs, ref Int32 Index)
     {
         double min = 999999999;
         //int pick = 0;          
-        double tmp1 = 0;
-        double tmp2 = 0;
-        
+        double tmp1;
+        double tmp2;
+
         for (int i = 0; i < Coefs.Length; i++)
         {
             double err1 = 0;
             double err2 = 0;
-            Boolean Doit= false;
 
-            if ((Depth-1 == i ) )            
-                Doit = true;            
-
-       
-            if (Doit==true)            
-                for (int x = 0; x < Reference.N * Reference.N; x++)
-                {
-                    tmp1 = (Reference.Values[x] - Coefs[i].Values[x]);
-                    tmp2 = (Reference.Values[x] + Coefs[i].Values[x]);
-                    err1 = err1 + tmp1 * tmp1;
-                    err2 = err2 + tmp2 * tmp2;
-                }
-                if (err1 < min)
-                {
-                    min = err1;
-                    Index = i;
-                }
-                if (err2 < min)
-                {
-                    min = err2;
-                    Index = i;
-                }            
+            for (int x = 0; x < Reference.N * Reference.N; x++)
+            {
+                tmp1 = (Reference.Values[x] - Coefs[i].Values[x]);
+                tmp2 = (Reference.Values[x] + Coefs[i].Values[x]);
+                err1 += tmp1 * tmp1;
+                err2 += tmp2 * tmp2;
+            }
+            if (err1 < min)
+            {
+                min = err1;
+                Index = i;
+            }
+            if (err2 < min)
+            {
+                min = err2;
+                Index = i;
+            }
         }
         return Coefs[Index];
     }
@@ -355,23 +349,21 @@ public class Matrix
     public Matrix MinMax()
     {
         double min = 255;
-        double max = 0;
-        double f = 0;
-        double d = 0;
+        double max = 0;      
         double avg = 0;
         double cnt = 0;
         Matrix M = new Matrix(N);
         for (int x = 0; x < N * N; x++)
         {
-            avg = avg + Values[x];
+            avg += Values[x];
             if (Values[x] > max)            
                 max = Values[x];            
             if (Values[x] < min)            
                 min = Values[x];            
-            cnt = cnt + 1;
+            cnt+= 1;
         }
-        avg = avg / cnt;
-        d = 0;
+        avg /= cnt;
+        double d = 0;
         if (Math.Abs(avg - min) > d)        
             d = Math.Abs(avg - min);        
         if (Math.Abs(avg - max) > d)        
@@ -384,15 +376,15 @@ public class Matrix
 
     public void Normalize()
     {
-        double avg = 0;
+        double avg;
         double total = 0;
         for (int x = 0; x < N * N; x++)        
-            total = total + Values[x];        
+            total += Values[x];        
         avg = total / (N * N);
         double rangetotal = 0;
 
         for(int x = 0; x < N * N; x++)        
-            rangetotal = rangetotal + (Values[x] - avg) * (Values[x] - avg);        
+            rangetotal +=(Values[x] - avg) * (Values[x] - avg);        
         double maxrange = Math.Sqrt(rangetotal);
         if (maxrange == 0)        
             for (int x = 0; x < N * N; x++)            
@@ -407,15 +399,15 @@ public class Matrix
     public Matrix GetNormalized()
     {
         Matrix M = new Matrix(N);
-        double avg = 0;
+        double avg;
         double total = 0;
         for (int x = 0; x < N * N; x++)        
-            total = total + Values[x];        
+            total += Values[x];        
         avg = total / (N * N);
         double rangetotal = 0;
 
         for (int x = 0; x < N * N; x++)        
-            rangetotal = rangetotal + (Values[x] - avg) * (Values[x] - avg);        
+            rangetotal +=(Values[x] - avg) * (Values[x] - avg);        
         double maxrange = Math.Sqrt(rangetotal);
         if (maxrange == 0)        
             for (int x = 0; x < N * N; x++)            
