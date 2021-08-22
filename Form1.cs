@@ -88,17 +88,20 @@ namespace WindowsFormsApplication1
             for (int x = 0; x < rib; x++)
                 for (int y = 0; y < rib; y++)
                 {
-                    Matrix minmax = coefs[i].MinMax();
-                    for (int x2 = 0; x2 < N; x2++)
-                        for (int y2 = 0; y2 < N; y2++)
-                            if (i < coefs.Length)
-                            {
-                                int c = (int)(minmax.Values[x2 + y2 * N]);
-                                if (c < 0) { c = 0; }
-                                if (c > 255) { c = 255; }
-                                Coefsbmp.SetPixel(x * (N + 1) + x2, y * (N + 1) + y2, Color.FromArgb(255, c, c, c));
-                            }
-                    i += 1;
+                 if (i <= coefs.Length - 1)
+                    {
+                       Matrix minmax = coefs[i].MinMax();
+                       for (int x2 = 0; x2 < N; x2++)
+                           for (int y2 = 0; y2 < N; y2++)
+                               if (i < coefs.Length)
+                               {
+                                   int c = (int)(minmax.Values[x2 + y2 * N]);
+                                   if (c < 0) { c = 0; }
+                                   if (c > 255) { c = 255; }
+                                   Coefsbmp.SetPixel(x * (N + 1) + x2, y * (N + 1) + y2, Color.FromArgb(255, c, c, c));
+                               }
+                       i += 1;
+                    }
                 }
             PicCoefs.Image = Helper.scaler(Coefsbmp, 256, 256, InterpolationMode.NearestNeighbor);
             PicCoefs.Refresh();
