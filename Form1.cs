@@ -68,14 +68,15 @@ namespace WindowsFormsApplication1
                 PicImage.Image = Helper.scaler(InputBitmap, 2, InterpolationMode.NearestNeighbor);
                 PicImage.Refresh();
 
-                for (int i = 0; i < CopyDictionairy.Length; i++)                
-                    if (Cnt[i] > 2)
-                    {
-                        Dictionairy[i].Normalize();
-                        CopyDictionairy[i].CopyFrom(Dictionairy[i]);
-                    }
-                    else
-                        Dictionairy[i].FillRnd(rnd, memory);                
+                for (int i = 0; i < CopyDictionairy.Length; i++)   
+                {
+                    if (Cnt[i] <= 2)                   
+                        Dictionairy[i].FillRnd(rnd, memory);  
+                                             
+                    Dictionairy[i].Normalize();
+                    CopyDictionairy[i].CopyFrom(Dictionairy[i]);
+                }
+                
                 DrawCoefs(SparseDicBitmap, CopyDictionairy, rib);
             }
         }
