@@ -58,7 +58,7 @@
             // 
             // PicCoefs
             // 
-            this.PicCoefs.Location = new System.Drawing.Point(1369, 12);
+            this.PicCoefs.Location = new System.Drawing.Point(1407, 12);
             this.PicCoefs.Name = "PicCoefs";
             this.PicCoefs.Size = new System.Drawing.Size(256, 256);
             this.PicCoefs.TabIndex = 2;
@@ -66,9 +66,9 @@
             // 
             // coefs_zero
             // 
-            this.coefs_zero.Location = new System.Drawing.Point(1369, 292);
+            this.coefs_zero.Location = new System.Drawing.Point(1407, 294);
             this.coefs_zero.Name = "coefs_zero";
-            this.coefs_zero.Size = new System.Drawing.Size(320, 240);
+            this.coefs_zero.Size = new System.Drawing.Size(276, 240);
             this.coefs_zero.TabIndex = 3;
             this.coefs_zero.TabStop = false;
             // 

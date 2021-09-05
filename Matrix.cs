@@ -268,6 +268,14 @@ public class Matrix
         return M;
     }
 
+
+    public static Matrix operator -( Matrix a1)
+    {
+        Matrix M = new Matrix(a1.N);
+        for (int x = 0; x < a1.N * a1.N; x++)
+            M.Values[x] = -a1.Values[x];
+        return M;
+    }
     //----------------------------------
 
     public static Matrix operator -(Matrix a1, double b1)
@@ -306,12 +314,11 @@ public class Matrix
         //int pick = 0;          
        double tmp1;
         double tmp2;
-
+       
         for (int i = 0; i < Coefs.Length; i++)
         {
             double err1 = 0;
             double err2 = 0;
-
             for (int x = 0; x < Reference.N * Reference.N; x++)
             {
                 tmp1 = (Reference.Values[x] - Coefs[i].Values[x]);
@@ -334,6 +341,29 @@ public class Matrix
     }
 
     //----------------------------------
+
+    static public Matrix Nearest(Matrix Reference, Matrix Coefs)
+    {
+          
+        double tmp1;
+        double tmp2;
+        double err1 = 0;
+        double err2 = 0;
+
+        for (int x = 0; x < Reference.N * Reference.N; x++)
+        {
+            tmp1 = (Reference.Values[x] - Coefs.Values[x]);
+            tmp2 = (Reference.Values[x] + Coefs.Values[x]);
+            err1 += tmp1 * tmp1;
+            err2 += tmp2 * tmp2;
+        }
+
+        if (err1 < err2)
+            return Reference;
+        else
+            return -Reference;                         
+    }
+
 
     public Matrix Mul(Double A)
     {
