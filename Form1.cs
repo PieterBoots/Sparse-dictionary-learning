@@ -15,7 +15,7 @@ namespace WindowsFormsApplication1
 
         readonly int N = 8;
         readonly int CoefsN = 64;
-        readonly int KSVD_Depth = 64;
+        readonly int KSVD_Depth = 50;
 
         //----------------------------------
 
@@ -82,30 +82,29 @@ namespace WindowsFormsApplication1
                         CopyDictionairy[i].CopyFrom(Dictionairy[i]);
                     }
 
-                DrawCoefs(SparseDicBitmap, CopyDictionairy, rib);
+                DrawCoefs(SparseDicBitmap, CopyDictionairy, rib, CoefsN);
             }
         }
 
         //----------------------------------
 
-        private void DrawCoefs(Bitmap Coefsbmp, Matrix[] coefs, int rib)
+        private void DrawCoefs(Bitmap Coefsbmp, Matrix[] coefs, int rib,int count)
         {
             int i = 0;
             for (int x = 0; x < rib; x++)
                 for (int y = 0; y < rib; y++)
                 {
-                    if (i <= coefs.Length - 1)
+                    if (i <= count - 1)
                     {
                         Matrix minmax = coefs[i].MinMax();
                         for (int x2 = 0; x2 < N; x2++)
                             for (int y2 = 0; y2 < N; y2++)
-                                if (i < coefs.Length)
-                                {
-                                    int c = (int)(minmax.Values[x2 + y2 * N]);
-                                    if (c < 0) { c = 0; }
-                                    if (c > 255) { c = 255; }
-                                    Coefsbmp.SetPixel(x * (N + 1) + x2, y * (N + 1) + y2, Color.FromArgb(255, c, c, c));
-                                }
+                            {
+                                int c = (int)(minmax.Values[x2 + y2 * N]);
+                                if (c < 0) { c = 0; }
+                                if (c > 255) { c = 255; }
+                                Coefsbmp.SetPixel(x * (N + 1) + x2, y * (N + 1) + y2, Color.FromArgb(255, c, c, c));
+                            }
                         i += 1;
                     }
                 }
@@ -154,9 +153,9 @@ namespace WindowsFormsApplication1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int rib = (int)Math.Sqrt(CoefsN);
-            if (rib * rib < CoefsN)
-                rib = (int)Math.Sqrt(CoefsN) + 1;
+            int rib = (int)Math.Sqrt(KSVD_Depth);
+            if (rib * rib < KSVD_Depth)
+                rib = (int)Math.Sqrt(KSVD_Depth) + 1;
 
             Bitmap InputBitmap = (Bitmap)Bitmap.FromFile("Kawasaki_Valencia_2007_09_320x240.bmp");
             Bitmap SparseDicBitmap = new Bitmap((N + 1) * rib, (N + 1) * rib, System.Drawing.Imaging.PixelFormat.Format24bppRgb);       
@@ -169,9 +168,12 @@ namespace WindowsFormsApplication1
             Matrix PatchOut=new Matrix(N,0);                            
             double[,] pixels = new double[InputBitmap.Width, InputBitmap.Height];
          
+            for(int i=0;i<N*N;i++)
+                Dictionairy[i] = new Matrix(N, 0);
+
             for (int p = 0; p < KSVD_Depth; p++)
             {
-                Dictionairy[p] = new Matrix(N, 0);
+               
                 Dictionairy[p].Fill(0);
                 for (points A = new points(InputBitmap.Width / N, InputBitmap.Height / N); A.DoIt; A.Inc())
                 {
@@ -197,7 +199,7 @@ namespace WindowsFormsApplication1
                 PicImage.Refresh();           
                 Dictionairy[p].Normalize();
             }
-            DrawCoefs(SparseDicBitmap, Dictionairy, rib);
+            DrawCoefs(SparseDicBitmap, Dictionairy, rib, KSVD_Depth);
         }
     
 
