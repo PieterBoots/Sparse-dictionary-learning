@@ -342,7 +342,25 @@ public class Matrix
 
     //----------------------------------
 
-    static public Matrix Nearest(Matrix Reference, Matrix Coefs)
+    static public Matrix MaxDot(Matrix Reference, Matrix[] Coefs, ref Int32 Index)
+    {
+        double max = 0;      
+        double value = 0;     
+        for (int i = 0; i < Coefs.Length; i++)
+        {
+            value =Math.Abs( Matrix.Dot(Reference, Coefs[i]));
+            if (value>max)
+            {
+                max = value;
+                Index = i;
+            }           
+        }
+        return Coefs[Index];
+    }
+
+    //----------------------------------
+
+    static public Matrix Sign(Matrix Reference, Matrix Coefs)
     {
           
         double tmp1;

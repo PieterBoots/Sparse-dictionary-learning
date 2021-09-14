@@ -13,14 +13,16 @@ namespace WindowsFormsApplication1
             InitializeComponent();
         }
 
-        readonly int N = 8;
+        readonly int N =8;
         readonly int CoefsN = 64;
-        readonly int KSVD_Depth = 50;
+        public  int KSVD_Depth = 64;
 
         //----------------------------------
 
         private void ButtonStart_Click(object sender, EventArgs e)
         {
+            KSVD_Depth = System.Convert.ToInt32(cbDepth.Text);
+
             int rib = (int)Math.Sqrt(CoefsN);
             if (rib * rib < CoefsN)
                 rib = (int)Math.Sqrt(CoefsN) + 1;
@@ -46,7 +48,8 @@ namespace WindowsFormsApplication1
             for (int i = 0; i < CoefsN; i++)
                 Cnt[i] = 0;
 
-            for (int repeat = 0; repeat < 20; repeat++)
+            double quant = System.Convert.ToInt32(cbQuant.Text);
+            for (int repeat = 0; repeat < 50; repeat++)
             {
                 for (points A = new points(InputBitmap.Width / N, InputBitmap.Height / N); A.DoIt; A.Inc())
                 {
@@ -54,12 +57,12 @@ namespace WindowsFormsApplication1
                     PatchOut = PatchIn.Average();
                     for (int p = 0; p < KSVD_Depth; p++)
                     {
-                        Matrix Norm = PatchIn - PatchOut;
-                        Norm.Normalize();
-                        Matrix Atom = Matrix.Nearest(Norm, CopyDictionairy, ref index);
-                        double pickvalue = Matrix.Dot(PatchIn - PatchOut, Atom);
+                        Matrix Norm = PatchIn - PatchOut;                   
+                        Matrix Atom = Matrix.MaxDot(Norm, CopyDictionairy, ref index);
+                        double pickvalue = Math.Round(Matrix.Dot(PatchIn - PatchOut, Atom) / quant) * quant;
                         PatchOut += (pickvalue * Atom);
-                        //FeedBack                                                            
+                    //FeedBack     
+                        Norm.Normalize();
                         Dictionairy[index] = Dictionairy[index] + pickvalue * Norm;
                         Cnt[index] += 1;
                     }
@@ -189,10 +192,11 @@ namespace WindowsFormsApplication1
                         PatchOut += (Matrix.Dot(PatchIn - PatchOut, Dictionairy[p - 1]) * Dictionairy[p - 1]);
                         setPatch(A, pixels, PatchOut);
                     }
+
                     Matrix d = (PatchIn - PatchOut);
                     d.Normalize();
 
-                    Dictionairy[p] = Dictionairy[p] + Matrix.Nearest(d, Dictionairy[p]);                                
+                    Dictionairy[p] = Dictionairy[p] + Matrix.Sign(d, Dictionairy[p]);                                
                     DrawPatch(A, InputBitmap, PatchOut);
                 }
                 PicImage.Image = Helper.scaler(InputBitmap, 4, InterpolationMode.NearestNeighbor);

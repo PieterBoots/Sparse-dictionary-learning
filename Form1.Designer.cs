@@ -33,6 +33,10 @@
             this.PicCoefs = new System.Windows.Forms.PictureBox();
             this.coefs_zero = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.cbDepth = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cbQuant = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.PicImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicCoefs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.coefs_zero)).BeginInit();
@@ -82,11 +86,65 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // cbDepth
+            // 
+            this.cbDepth.FormattingEnabled = true;
+            this.cbDepth.Items.AddRange(new object[] {
+            "2",
+            "4",
+            "8",
+            "16",
+            "32"});
+            this.cbDepth.Location = new System.Drawing.Point(27, 90);
+            this.cbDepth.Name = "cbDepth";
+            this.cbDepth.Size = new System.Drawing.Size(62, 21);
+            this.cbDepth.TabIndex = 5;
+            this.cbDepth.Text = "64";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(38, 74);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(36, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Depth";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(38, 114);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Quantize";
+            // 
+            // cbQuant
+            // 
+            this.cbQuant.FormattingEnabled = true;
+            this.cbQuant.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "4",
+            "8",
+            "16",
+            "32",
+            "64"});
+            this.cbQuant.Location = new System.Drawing.Point(27, 130);
+            this.cbQuant.Name = "cbQuant";
+            this.cbQuant.Size = new System.Drawing.Size(62, 21);
+            this.cbQuant.TabIndex = 8;
+            this.cbQuant.Text = "1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1735, 1005);
+            this.Controls.Add(this.cbQuant);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.cbDepth);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.coefs_zero);
             this.Controls.Add(this.PicCoefs);
@@ -98,6 +156,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PicCoefs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.coefs_zero)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
     }
 
@@ -108,6 +167,10 @@
     private System.Windows.Forms.PictureBox PicCoefs;
         private System.Windows.Forms.PictureBox coefs_zero;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox cbDepth;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbQuant;
     }
 }
 
