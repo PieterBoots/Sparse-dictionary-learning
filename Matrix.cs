@@ -381,7 +381,27 @@ public class Matrix
         else
             return -Reference;                         
     }
+    
+    //----------------------------------
 
+    static public Matrix DotMinimumEuclideanDistance(Matrix Reference, Matrix[] Coefs, ref Int32 Index)
+    {
+        double min = 9999999999;      
+        double value = 0;     
+        for (int i = 0; i < Coefs.Length; i++)
+        {
+           value = Matrix.Dot(Reference, Coefs[i]);
+           double err = EuclideanDistance(value * Coefs[i] , Reference);
+            if (err<min)
+            {
+                min = err;
+                Index = i;
+            }           
+        }
+        return Coefs[Index];
+    }
+
+    //----------------------------------
 
     public Matrix Mul(Double A)
     {
